@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+    mongodb:
+        container_name: mongodb
+        image: mongodb/mongodb-community-server:5.0-ubi8
+        restart: always
+        ports:
+          - "27017:27017"
+        volumes:
+          - mongodb_data:/data/db
+
+    webapi:
+        container_name: webapi
+        build:
+            context: .
+            dockerfile: WebAPI/Dockerfile
+        depends_on:
+            - mongodb
+        restart: always
+
+volumes:
+  mongodb_data:
