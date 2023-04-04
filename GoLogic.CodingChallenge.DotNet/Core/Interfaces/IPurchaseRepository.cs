@@ -18,7 +18,7 @@ namespace Core.Interfaces
         /// <returns>
         ///     A list of all purchases made by the specified user.
         /// </returns>
-        public IList<Purchase> GetAllUserPurchases(User user);
+        public Task<IList<Purchase>> GetAllUserPurchasesAsync(User user);
 
         /// <summary>
         ///     Saves a new purchase to the repository.
@@ -26,7 +26,7 @@ namespace Core.Interfaces
         /// <param name="purchase">
         ///     The purchase to save.
         /// </param>
-        public void SaveNewPurchase(Purchase purchase);
+        public Task SaveNewPurchaseAsync(Purchase purchase);
 
         #endregion
     }
