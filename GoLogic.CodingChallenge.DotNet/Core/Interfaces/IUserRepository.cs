@@ -10,6 +10,12 @@ namespace Core.Interfaces
         #region Public Members
 
         /// <summary>
+        ///     Deletes all users from the repository.
+        /// </summary>
+        /// <returns></returns>
+        Task DeleteAllUsersAsync();
+
+        /// <summary>
         ///     Gets a user by name.
         /// </summary>
         /// <param name="name">
@@ -18,7 +24,7 @@ namespace Core.Interfaces
         /// <returns>
         ///     The user with the specified name.
         /// </returns>
-        public Task<User> GetByNameAsync(string name);
+        Task<User> GetByNameAsync(string name);
 
         /// <summary>
         ///     Saves a new user.
@@ -26,7 +32,7 @@ namespace Core.Interfaces
         /// <param name="user">
         ///     The user to save.
         /// </param>
-        public Task SaveNewUserAsync(User user);
+        Task SaveNewUserAsync(User user);
 
         #endregion
     }

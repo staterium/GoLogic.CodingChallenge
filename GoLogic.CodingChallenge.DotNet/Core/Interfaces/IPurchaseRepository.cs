@@ -10,6 +10,11 @@ namespace Core.Interfaces
         #region Public Members
 
         /// <summary>
+        ///     Deletes all purchases from the repository.
+        /// </summary>
+        Task DeleteAllPurchasesAsync();
+
+        /// <summary>
         ///     Returns a list of all purchases made by the specified user.
         /// </summary>
         /// <param name="user">
@@ -18,7 +23,7 @@ namespace Core.Interfaces
         /// <returns>
         ///     A list of all purchases made by the specified user.
         /// </returns>
-        public Task<List<Purchase>> GetAllUserPurchasesAsync(User user);
+        Task<List<Purchase>> GetAllUserPurchasesAsync(User user);
 
         /// <summary>
         ///     Saves a new purchase to the repository.
@@ -26,7 +31,7 @@ namespace Core.Interfaces
         /// <param name="purchase">
         ///     The purchase to save.
         /// </param>
-        public Task SaveNewPurchaseAsync(Purchase purchase);
+        Task SaveNewPurchaseAsync(Purchase purchase);
 
         #endregion
     }

@@ -47,6 +47,11 @@ namespace Infrastructure.Repositories.MongoDB
             return _usersCollection.InsertOneAsync(user);
         }
 
+        public Task DeleteAllUsersAsync()
+        {
+            return _usersCollection.DeleteManyAsync(_ => true);
+        }
+
         #endregion
     }
 }

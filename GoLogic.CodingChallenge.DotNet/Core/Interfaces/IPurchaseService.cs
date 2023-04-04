@@ -23,7 +23,7 @@ namespace Core.Interfaces
         /// </returns>
         /// <exception cref="Exceptions.InsufficientFundsException" />
         /// <exception cref="Exceptions.ProductUnavailableException" />
-        public Purchase PurchaseProduct(Product product, User user);
+        Purchase PurchaseProduct(Product product, User user);
 
         #endregion
     }

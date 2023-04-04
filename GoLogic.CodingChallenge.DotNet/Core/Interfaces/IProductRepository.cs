@@ -10,12 +10,17 @@ namespace Core.Interfaces
         #region Public Members
 
         /// <summary>
+        ///     Deletes all products from the repository.
+        /// </summary>
+        Task DeleteAllProductsAsync();
+
+        /// <summary>
         ///     Returns a list of all products available in the vending machine.
         /// </summary>
         /// <returns>
         ///     A list of all products available in the vending machine.
         /// </returns>
-        public Task<List<Product>> GetAllProductsAsync();
+        Task<List<Product>> GetAllProductsAsync();
 
         /// <summary>
         ///     Returns a product by its name.
@@ -26,7 +31,7 @@ namespace Core.Interfaces
         /// <returns>
         ///     The product with the specified name.
         /// </returns>
-        public Task<Product> GetProductByNameAsync(string name);
+        Task<Product> GetProductByNameAsync(string name);
 
         /// <summary>
         ///     Saves a new product to the repository.
@@ -34,7 +39,16 @@ namespace Core.Interfaces
         /// <param name="product">
         ///     The product to save.
         /// </param>
-        public Task SaveNewProductAsync(Product product);
+        Task SaveNewProductAsync(Product product);
+
+        /// <summary>
+        ///     Saves a list of new products to the repository.
+        /// </summary>
+        /// <param name="products">
+        ///     The list of products to save.
+        /// </param>
+        /// <returns></returns>
+        Task SaveNewProductsAsync(List<Product> products);
 
         #endregion
     }
