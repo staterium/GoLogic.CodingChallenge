@@ -18,7 +18,7 @@ namespace Core.Interfaces
         /// <returns>
         ///     The user with the specified name.
         /// </returns>
-        public User GetByName(string name);
+        public Task<User> GetByNameAsync(string name);
 
         /// <summary>
         ///     Saves a new user.
@@ -26,7 +26,7 @@ namespace Core.Interfaces
         /// <param name="user">
         ///     The user to save.
         /// </param>
-        public void SaveNewUser(User user);
+        public Task SaveNewUserAsync(User user);
 
         #endregion
     }
