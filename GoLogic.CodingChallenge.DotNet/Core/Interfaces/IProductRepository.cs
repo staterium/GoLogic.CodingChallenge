@@ -15,7 +15,7 @@ namespace Core.Interfaces
         /// <returns>
         ///     A list of all products available in the vending machine.
         /// </returns>
-        public IList<Product> GetAllProducts();
+        public Task<List<Product>> GetAllProductsAsync();
 
         /// <summary>
         ///     Returns a product by its name.
@@ -26,7 +26,7 @@ namespace Core.Interfaces
         /// <returns>
         ///     The product with the specified name.
         /// </returns>
-        public Product GetProductByName(string name);
+        public Task<Product> GetProductByNameAsync(string name);
 
         /// <summary>
         ///     Saves a new product to the repository.
@@ -34,7 +34,7 @@ namespace Core.Interfaces
         /// <param name="product">
         ///     The product to save.
         /// </param>
-        public void SaveNewProduct(Product product);
+        public Task SaveNewProductAsync(Product product);
 
         #endregion
     }
