@@ -12,19 +12,23 @@ namespace Core.Entities
 
         public int QuantityAvailable { get; set; }
 
+        public decimal Price { get; set; }
+
         public bool IsAvailable => QuantityAvailable > 0;
 
         #endregion
 
         #region Constructors
 
-        public Product(string name, string code, int quantityAvailable)
+        public Product(string name, string code, decimal price, int quantityAvailable)
         {
             Guard.Against.Negative(quantityAvailable);
+            Guard.Against.NegativeOrZero(price);
 
             Name = name;
             QuantityAvailable = quantityAvailable;
             Code = code;
+            Price = price;
         }
 
         #endregion

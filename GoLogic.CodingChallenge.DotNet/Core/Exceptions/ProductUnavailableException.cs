@@ -4,7 +4,7 @@
     {
         #region Constructors
 
-        public ProductUnavailableException(string message = "Product is not available") : base(message)
+        public ProductUnavailableException(string message = "Purchase failed: Product is out of stock") : base(message)
         {
         }
 

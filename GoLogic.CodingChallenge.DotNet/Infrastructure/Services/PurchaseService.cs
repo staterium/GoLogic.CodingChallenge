@@ -10,10 +10,16 @@ namespace Core.Services
 
         public Purchase PurchaseProduct(Product product, User user)
         {
-            if (product.IsAvailable)
-                return new Purchase { ProductName = product.Name, UserName = user.Name };
+            if (!product.IsAvailable)
+                throw new ProductUnavailableException();
 
-            throw new ProductUnavailableException("");
+            if (user.BalanceAvailable < product.Price)
+                throw new InsufficientFundsException();
+
+            product.QuantityAvailable--;
+            user.BalanceAvailable -= product.Price;
+
+            return new Purchase { ProductName = product.Name, UserName = user.Name };
         }
 
         #endregion
