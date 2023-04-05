@@ -5,7 +5,7 @@ namespace Core.Entities
     /// <summary>
     ///     An entity class describing a product available in the vending machine.
     /// </summary>
-    public class Product
+    public class Product : EntityBase<Guid>
     {
         #region Properties
 

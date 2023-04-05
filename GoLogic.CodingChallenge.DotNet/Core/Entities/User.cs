@@ -6,7 +6,7 @@ namespace Core.Entities
     ///     An entity class describing a user of the vending machine.
     ///     This class is used to store the balance available to the user, and to track purchase history.
     /// </summary>
-    public class User
+    public class User : EntityBase<Guid>
     {
         #region Properties
 

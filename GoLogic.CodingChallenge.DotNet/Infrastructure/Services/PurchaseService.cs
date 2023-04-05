@@ -19,7 +19,7 @@ namespace Core.Services
             product.QuantityAvailable--;
             user.BalanceAvailable -= product.Price;
 
-            return new Purchase { ProductName = product.Name, UserName = user.Name };
+            return new Purchase(user.Name, product.Name);
         }
 
         #endregion
