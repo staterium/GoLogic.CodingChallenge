@@ -31,7 +31,7 @@ namespace Core.Interfaces
         /// <returns>
         ///     The product with the specified name.
         /// </returns>
-        Task<Product> GetProductByNameAsync(string name);
+        Task<Product?> GetProductByNameAsync(string name);
 
         /// <summary>
         ///     Saves a new product to the repository.

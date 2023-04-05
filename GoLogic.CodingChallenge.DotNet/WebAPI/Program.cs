@@ -1,7 +1,6 @@
-using Core.Interfaces;
 using Infrastructure.Config;
-using Infrastructure.Repositories.MongoDB;
 using WebAPI;
+using WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +9,14 @@ builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("M
 
 //add repositories
 builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<IProductRepository, ProductRepository>();
 builder.Services.AddTransient<IPurchaseRepository, PurchaseRepository>();
+builder.Services.RegisterModules();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//automapper
+builder.Services.AddAutoMapper(c => c.AddMaps("WebAPI"));
 
 var app = builder.Build();
 
@@ -33,4 +35,5 @@ using (var scope = app.Services.CreateScope())
     await SeedData.InitializeAsync(services);
 }
 
+app.MapEndpoints();
 app.Run();
