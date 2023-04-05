@@ -60,5 +60,8 @@ namespace WebAPI
         }
 
         #endregion
+
+        //public static readonly Product Product5 = new("Milky Way", "B2", 2.4m, 4);
+        //public static readonly Product Product6 = new("M&Ms", "B3", 2.7m, 0);
     }
 }
