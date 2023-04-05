@@ -47,8 +47,15 @@ namespace Core.Interfaces
         /// <param name="products">
         ///     The list of products to save.
         /// </param>
-        /// <returns></returns>
         Task SaveNewProductsAsync(List<Product> products);
+
+        /// <summary>
+        ///     Updates an existing product.
+        /// </summary>
+        /// <param name="product">
+        ///     The product to update.
+        /// </param>
+        Task UpdateProductAsync(Product product);
 
         #endregion
     }

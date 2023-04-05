@@ -57,6 +57,12 @@ namespace Infrastructure.Repositories.MongoDB
             return _productsCollection.InsertManyAsync(products);
         }
 
+        public Task UpdateProductAsync(Product product)
+        {
+            var filter = Builders<Product>.Filter.Eq("Id", product.Id);
+            return _productsCollection.ReplaceOneAsync(filter, product);
+        }
+
         public Task DeleteAllProductsAsync()
         {
             return _productsCollection.DeleteManyAsync(_ => true);

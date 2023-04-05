@@ -13,6 +13,7 @@ namespace WebAPI.Modules.Users
         {
             endpoints.MapGet("/user/{name}", GetUserByNameAsync());
             endpoints.MapPost("/user", CreateUserAsync());
+            endpoints.MapPost("/deposit", DepositFundsAsync());
 
             return endpoints;
         }
@@ -33,6 +34,22 @@ namespace WebAPI.Modules.Users
             {
                 var user = new User(userDto.Name);
                 await userRepository.SaveNewUserAsync(user);
+
+                return Results.Ok();
+            };
+        }
+
+        private static Func<DepositFundsDto, IUserRepository, Task<IResult>> DepositFundsAsync()
+        {
+            return async (depositFundsDto, userRepository) =>
+            {
+                var user = await userRepository.GetByNameAsync(depositFundsDto.UserName);
+
+                if (user == null)
+                    return Results.NotFound();
+
+                user.BalanceAvailable += depositFundsDto.DepositAmount;
+                await userRepository.UpdateUserAsync(user);
 
                 return Results.Ok();
             };

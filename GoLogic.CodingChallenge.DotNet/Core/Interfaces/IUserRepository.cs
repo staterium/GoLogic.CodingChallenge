@@ -34,6 +34,14 @@ namespace Core.Interfaces
         /// </param>
         Task SaveNewUserAsync(User user);
 
+        /// <summary>
+        ///     Updates an existing user.
+        /// </summary>
+        /// <param name="user">
+        ///     The user to update.
+        /// </param>
+        Task UpdateUserAsync(User user);
+
         #endregion
     }
 }
