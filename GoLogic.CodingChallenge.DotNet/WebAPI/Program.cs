@@ -30,7 +30,7 @@ app.UseHttpsRedirection();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    SeedData.Initialize(services);
+    await SeedData.InitializeAsync(services);
 }
 
 app.Run();

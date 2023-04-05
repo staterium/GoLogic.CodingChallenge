@@ -18,21 +18,24 @@ namespace WebAPI
 
         #region Public Members
 
-        public static void Initialize(IServiceProvider serviceProvider)
+        public static async Task InitializeAsync(IServiceProvider serviceProvider)
         {
-            ClearUsers(serviceProvider);
-            ClearPurchases(serviceProvider);
-            ClearAndSeedProducts(serviceProvider);
+            var seedTasks = new List<Task>
+            {
+                ClearUsersAsync(serviceProvider), ClearPurchasesAsync(serviceProvider), ClearAndSeedProductsAsync(serviceProvider)
+            };
+
+            await Task.WhenAll(seedTasks);
         }
 
         #endregion
 
         #region Private Members
 
-        private static void ClearAndSeedProducts(IServiceProvider serviceProvider)
+        private static async Task ClearAndSeedProductsAsync(IServiceProvider serviceProvider)
         {
             var productRepository = serviceProvider.GetRequiredService<IProductRepository>();
-            productRepository.DeleteAllProductsAsync().Wait();
+            await productRepository.DeleteAllProductsAsync();
 
             var productList = new List<Product>
             {
@@ -44,24 +47,21 @@ namespace WebAPI
                 Product6
             };
 
-            productRepository.SaveNewProductsAsync(productList).Wait();
+            await productRepository.SaveNewProductsAsync(productList);
         }
 
-        private static void ClearPurchases(IServiceProvider serviceProvider)
+        private static async Task ClearPurchasesAsync(IServiceProvider serviceProvider)
         {
             var purchaseRepository = serviceProvider.GetRequiredService<IPurchaseRepository>();
-            purchaseRepository.DeleteAllPurchasesAsync().Wait();
+            await purchaseRepository.DeleteAllPurchasesAsync();
         }
 
-        private static void ClearUsers(IServiceProvider serviceProvider)
+        private static async Task ClearUsersAsync(IServiceProvider serviceProvider)
         {
             var userRepository = serviceProvider.GetRequiredService<IUserRepository>();
-            userRepository.DeleteAllUsersAsync().Wait();
+            await userRepository.DeleteAllUsersAsync();
         }
 
         #endregion
-
-        //public static readonly Product Product5 = new("Milky Way", "B2", 2.4m, 4);
-        //public static readonly Product Product6 = new("M&Ms", "B3", 2.7m, 0);
     }
 }
