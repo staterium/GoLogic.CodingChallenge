@@ -3,6 +3,9 @@ using WebAPI.Modules.Products.Models;
 
 namespace WebAPI.Modules.Products
 {
+    /// <summary>
+    ///     A module that contains all the functionality related to products (endpoints, services etc).
+    /// </summary>
     internal class ProductsModule : IModule
     {
         #region Interface Implementations

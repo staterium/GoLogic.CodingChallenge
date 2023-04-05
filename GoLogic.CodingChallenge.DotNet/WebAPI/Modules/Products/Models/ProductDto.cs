@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace WebAPI.Modules.Products.Models
+﻿namespace WebAPI.Modules.Products.Models
 {
     [AutoMap(typeof(Product))]
     internal class ProductDto

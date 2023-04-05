@@ -24,7 +24,7 @@ namespace Core.Interfaces
         /// <returns>
         ///     The user with the specified name.
         /// </returns>
-        Task<User> GetByNameAsync(string name);
+        Task<User?> GetByNameAsync(string name);
 
         /// <summary>
         ///     Saves a new user.

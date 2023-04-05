@@ -24,7 +24,7 @@ namespace Core.Entities
 
         #region Constructors
 
-        public User(string name, decimal balanceAvailable)
+        public User(string name, decimal balanceAvailable = 0m)
         {
             Guard.Against.Negative(balanceAvailable);
 
