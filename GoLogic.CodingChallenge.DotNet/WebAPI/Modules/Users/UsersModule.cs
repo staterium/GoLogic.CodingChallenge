@@ -1,4 +1,4 @@
-﻿using WebAPI.Modules.Purchases.Models;
+﻿using WebAPI.Modules.Purchases;
 using WebAPI.Modules.Users.Models;
 
 namespace WebAPI.Modules.Users
@@ -41,20 +41,7 @@ namespace WebAPI.Modules.Users
 
                 var products = await productRepository.GetAllProductsAsync();
                 var purchases = await purchaseRepository.GetAllUserPurchasesAsync(user);
-
-                var purchasesDto = purchases.Select(
-                    s => new ListPurchasesDto
-                    {
-                        Price = products.First(f => f.Name == s.ProductName).Price,
-                        ProductName = s.ProductName,
-                        Quantity = 1,
-                        Total = products.First(f => f.Name == s.ProductName).Price
-                    });
-
-                var purchasesGrouped = purchasesDto.GroupBy(g => new { g.ProductName, g.Price })
-                    .ToList()
-                    .Select(s => new { s.Key.ProductName, s.Key.Price, Quantity = s.Sum(g => g.Quantity), Total = s.Sum(g => g.Total) })
-                    .ToList();
+                var purchasesGrouped = PurchasesModule.GetPurchasesGrouped(purchases, products);
 
                 var result = new
                 {

@@ -7,15 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 //add config
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("MongoDBDatabase"));
 
-//add repositories
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<IPurchaseRepository, PurchaseRepository>();
+//add modules
 builder.Services.RegisterModules();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//automapper
+//add automapper
 builder.Services.AddAutoMapper(c => c.AddMaps("WebAPI"));
 
 var app = builder.Build();

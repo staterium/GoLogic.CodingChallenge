@@ -28,6 +28,27 @@ namespace WebAPI.Modules.Purchases
 
         #endregion
 
+        #region Public Members
+
+        public static List<GroupedPurchaseDto> GetPurchasesGrouped(List<Purchase> purchases, List<Product> products)
+        {
+            var purchasesDto = purchases.Select(
+                s => new ListPurchasesDto { Price = products.First(f => f.Name == s.ProductName).Price, ProductName = s.ProductName, Quantity = 1 });
+
+            var purchasesGrouped = purchasesDto.GroupBy(g => new { g.ProductName, g.Price })
+                .ToList()
+                .Select(
+                    s => new GroupedPurchaseDto
+                    {
+                        ProductName = s.Key.ProductName, Price = s.Key.Price, Quantity = s.Sum(g => g.Quantity), Total = s.Sum(g => g.Total)
+                    })
+                .ToList();
+
+            return purchasesGrouped;
+        }
+
+        #endregion
+
         #region Private Members
 
         private static Func<MakePurchaseDto, IUserRepository, IProductRepository, IPurchaseService, Task<IResult>> DoPurchaseAsync()
@@ -69,19 +90,7 @@ namespace WebAPI.Modules.Purchases
                 var products = await productRepository.GetAllProductsAsync();
                 var purchases = await purchaseRepository.GetAllUserPurchasesAsync(user);
 
-                var purchasesDto = purchases.Select(
-                    s => new ListPurchasesDto
-                    {
-                        Price = products.First(f => f.Name == s.ProductName).Price,
-                        ProductName = s.ProductName,
-                        Quantity = 1,
-                        Total = products.First(f => f.Name == s.ProductName).Price
-                    });
-
-                var purchasesGrouped = purchasesDto.GroupBy(g => new { g.ProductName, g.Price })
-                    .ToList()
-                    .Select(s => new { s.Key.ProductName, s.Key.Price, Quantity = s.Sum(g => g.Quantity), Total = s.Sum(g => g.Total) })
-                    .ToList();
+                var purchasesGrouped = GetPurchasesGrouped(purchases, products);
 
                 return Results.Ok(purchasesGrouped);
             };
