@@ -12,6 +12,7 @@ namespace WebAPI.Modules.Users
 
         public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
         {
+            endpoints.MapGet("/", () => Results.Ok("API available"));
             endpoints.MapGet("/user/{username}", GetUserByNameAsync());
             endpoints.MapPost("/user", CreateUserAsync());
             endpoints.MapPost("/deposit", DepositFundsAsync());

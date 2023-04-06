@@ -22,7 +22,15 @@
                 ClearUsersAsync(serviceProvider), ClearPurchasesAsync(serviceProvider), ClearAndSeedProductsAsync(serviceProvider)
             };
 
-            await Task.WhenAll(seedTasks);
+            try
+            {
+                await Task.WhenAll(seedTasks);
+            }
+            // Only happens when the MongoDB container hasn't started yet or is unreachable.
+            // Swallow exception so the API can still start, and we can see the error when making API calls.
+            catch (TimeoutException)
+            {
+            }
         }
 
         #endregion
