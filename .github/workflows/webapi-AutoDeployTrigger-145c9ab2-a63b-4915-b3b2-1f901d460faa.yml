@@ -37,7 +37,7 @@ jobs:
           push: true
           tags: gologic.azurecr.io/webapi:${{ github.sha }}
           file: ./GoLogic.CodingChallenge.DotNet/WebAPI/Dockerfile
-          context: ./GoLogic.CodingChallenge.DotNet/WebAPI/
+          context: ./GoLogic.CodingChallenge.DotNet/
 
 
   deploy:
