@@ -1,6 +1,8 @@
 ﻿using Core.Entities;
 using Core.Exceptions;
+using Core.Interfaces;
 using Core.Services;
+using FakeItEasy;
 using FluentAssertions;
 
 namespace UnitTests.Services
@@ -10,15 +12,60 @@ namespace UnitTests.Services
         #region Public Members
 
         [Fact]
-        public void PurchaseProduct_DecreasesStockLevel_ByOne()
+        public async Task PurchaseProduct_CallsSaveNewPurchase_OnSuccess()
         {
             //arrange
-            var purchaseService = new PurchaseService();
+            var purchaseService = SetupPurchaseService(out _, out _, out var fakePurchaseRepository);
             var user = GetTestUser(15m);
             var product = GetTestProduct(2);
 
             //act
-            var purchase = purchaseService.PurchaseProduct(product, user);
+            var purchase = await purchaseService.PurchaseProductAsync(product, user);
+
+            //assert
+            A.CallTo(() => fakePurchaseRepository.SaveNewPurchaseAsync(purchase)).MustHaveHappenedOnceExactly();
+        }
+
+        [Fact]
+        public async Task PurchaseProduct_CallsUpdateProduct_OnSuccess()
+        {
+            //arrange
+            var purchaseService = SetupPurchaseService(out _, out var fakeProductRepository, out _);
+            var user = GetTestUser(15m);
+            var product = GetTestProduct(2);
+
+            //act
+            await purchaseService.PurchaseProductAsync(product, user);
+
+            //assert
+            A.CallTo(() => fakeProductRepository.UpdateProductAsync(product)).MustHaveHappenedOnceExactly();
+        }
+
+        [Fact]
+        public async Task PurchaseProduct_CallsUpdateUser_OnSuccess()
+        {
+            //arrange
+            var purchaseService = SetupPurchaseService(out var fakeUserRepository, out _, out _);
+            var user = GetTestUser(15m);
+            var product = GetTestProduct(2);
+
+            //act
+            await purchaseService.PurchaseProductAsync(product, user);
+
+            //assert
+            A.CallTo(() => fakeUserRepository.UpdateUserAsync(user)).MustHaveHappenedOnceExactly();
+        }
+
+        [Fact]
+        public async Task PurchaseProduct_DecreasesStockLevel_ByOne()
+        {
+            //arrange
+            var purchaseService = SetupPurchaseService(out _, out _, out _);
+            var user = GetTestUser(15m);
+            var product = GetTestProduct(2);
+
+            //act
+            var purchase = await purchaseService.PurchaseProductAsync(product, user);
 
             //assert
             purchase.Should().NotBeNull();
@@ -26,30 +73,30 @@ namespace UnitTests.Services
         }
 
         [Fact]
-        public void PurchaseProduct_DecreasesUserBalance_ByPriceOfProduct()
+        public async Task PurchaseProduct_DecreasesUserBalance_ByPriceOfProduct()
         {
             //arrange
-            var purchaseService = new PurchaseService();
+            var purchaseService = SetupPurchaseService(out _, out _, out _);
             var user = GetTestUser(15m);
             var product = GetTestProduct(2);
 
             //act
-            var purchase = purchaseService.PurchaseProduct(product, user);
+            var purchase = await purchaseService.PurchaseProductAsync(product, user);
 
             //assert
             user.BalanceAvailable.Should().Be(10m);
         }
 
         [Fact]
-        public void PurchaseProduct_ReturnsPurchaseEntity_WhenProductQuantityIsGreaterThanZero()
+        public async Task PurchaseProduct_ReturnsPurchaseEntity_WhenProductQuantityIsGreaterThanZero()
         {
             //arrange
-            var purchaseService = new PurchaseService();
+            var purchaseService = SetupPurchaseService(out _, out _, out _);
             var user = GetTestUser(15m);
             var product = GetTestProduct(2);
 
             //act
-            var purchase = purchaseService.PurchaseProduct(product, user);
+            var purchase = await purchaseService.PurchaseProductAsync(product, user);
 
             //assert
             purchase.Should().NotBeNull();
@@ -58,10 +105,10 @@ namespace UnitTests.Services
         }
 
         [Fact]
-        public void PurchaseProduct_ThrowsException_WhenProductQuantityIsLessThanZero()
+        public async Task PurchaseProduct_ThrowsException_WhenProductQuantityIsLessThanZero()
         {
             //arrange
-            var purchaseService = new PurchaseService();
+            var purchaseService = SetupPurchaseService(out _, out _, out _);
             var user = GetTestUser(15m);
             var product = GetTestProduct(0);
 
@@ -69,31 +116,31 @@ namespace UnitTests.Services
             product.QuantityAvailable = -1;
 
             //assert
-            Assert.Throws<ProductUnavailableException>(() => purchaseService.PurchaseProduct(product, user));
+            await Assert.ThrowsAsync<ProductUnavailableException>(async () => await purchaseService.PurchaseProductAsync(product, user));
         }
 
         [Fact]
-        public void PurchaseProduct_ThrowsException_WhenProductQuantityIsZero()
+        public async Task PurchaseProduct_ThrowsException_WhenProductQuantityIsZero()
         {
             //arrange
-            var purchaseService = new PurchaseService();
+            var purchaseService = SetupPurchaseService(out _, out _, out _);
             var user = GetTestUser(15m);
             var product = GetTestProduct(0);
 
             //assert
-            Assert.Throws<ProductUnavailableException>(() => purchaseService.PurchaseProduct(product, user));
+            await Assert.ThrowsAsync<ProductUnavailableException>(async () => await purchaseService.PurchaseProductAsync(product, user));
         }
 
         [Fact]
-        public void PurchaseProduct_ThrowsException_WhenUserBalanceIsLessThanPriceOfProduct()
+        public async Task PurchaseProduct_ThrowsException_WhenUserBalanceIsLessThanPriceOfProduct()
         {
             //arrange
-            var purchaseService = new PurchaseService();
+            var purchaseService = SetupPurchaseService(out _, out _, out _);
             var user = GetTestUser(1m);
             var product = GetTestProduct(5);
 
             //assert
-            Assert.Throws<InsufficientFundsException>(() => purchaseService.PurchaseProduct(product, user));
+            await Assert.ThrowsAsync<InsufficientFundsException>(async () => await purchaseService.PurchaseProductAsync(product, user));
         }
 
         #endregion
@@ -105,9 +152,20 @@ namespace UnitTests.Services
             return new Product("TestProduct", "A1", 5m, quantityAvailable);
         }
 
-        private User GetTestUser(decimal balanceAvailable)
+        private static User GetTestUser(decimal balanceAvailable)
         {
             return new User("TestUser", balanceAvailable);
+        }
+
+        private static IPurchaseService SetupPurchaseService(out IUserRepository fakeUserRepository,
+            out IProductRepository fakeProductRepository,
+            out IPurchaseRepository fakePurchaseRepository)
+        {
+            fakeUserRepository = A.Fake<IUserRepository>();
+            fakeProductRepository = A.Fake<IProductRepository>();
+            fakePurchaseRepository = A.Fake<IPurchaseRepository>();
+
+            return new PurchaseService(fakePurchaseRepository, fakeUserRepository, fakeProductRepository);
         }
 
         #endregion
