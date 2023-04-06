@@ -13,6 +13,7 @@ namespace WebAPI.Modules.Purchases
         public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
         {
             endpoints.MapPost("/purchase", DoPurchaseAsync());
+            endpoints.MapGet("/purchases/{username}", GetPurchasesAsync());
 
             return endpoints;
         }
@@ -29,7 +30,7 @@ namespace WebAPI.Modules.Purchases
 
         #region Private Members
 
-        private static Func<PurchaseDto, IUserRepository, IProductRepository, IPurchaseService, Task<IResult>> DoPurchaseAsync()
+        private static Func<MakePurchaseDto, IUserRepository, IProductRepository, IPurchaseService, Task<IResult>> DoPurchaseAsync()
         {
             return async (purchaseDto, userRepository, productRepository, purchaseService) =>
             {
@@ -53,6 +54,36 @@ namespace WebAPI.Modules.Purchases
                 {
                     return Results.BadRequest(ex.Message);
                 }
+            };
+        }
+
+        private static Func<string, IUserRepository, IProductRepository, IPurchaseRepository, Task<IResult>> GetPurchasesAsync()
+        {
+            return async (userName, userRepository, productRepository, purchaseRepository) =>
+            {
+                var user = await userRepository.GetByNameAsync(userName);
+
+                if (user == null)
+                    return Results.NotFound("No such user found");
+
+                var products = await productRepository.GetAllProductsAsync();
+                var purchases = await purchaseRepository.GetAllUserPurchasesAsync(user);
+
+                var purchasesDto = purchases.Select(
+                    s => new ListPurchasesDto
+                    {
+                        Price = products.First(f => f.Name == s.ProductName).Price,
+                        ProductName = s.ProductName,
+                        Quantity = 1,
+                        Total = products.First(f => f.Name == s.ProductName).Price
+                    });
+
+                var purchasesGrouped = purchasesDto.GroupBy(g => new { g.ProductName, g.Price })
+                    .ToList()
+                    .Select(s => new { s.Key.ProductName, s.Key.Price, Quantity = s.Sum(g => g.Quantity), Total = s.Sum(g => g.Total) })
+                    .ToList();
+
+                return Results.Ok(purchasesGrouped);
             };
         }
 

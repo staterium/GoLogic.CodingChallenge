@@ -1,7 +1,4 @@
-﻿using Core.Entities;
-using Core.Interfaces;
-
-namespace WebAPI
+﻿namespace WebAPI
 {
     public static class SeedData
     {
@@ -11,7 +8,7 @@ namespace WebAPI
         public static readonly Product Product2 = new("Mars", "A2", 1.5m, 2);
         public static readonly Product Product3 = new("Twix", "A3", 1.8m, 3);
         public static readonly Product Product4 = new("Snickers", "B1", 2.1m, 1);
-        public static readonly Product Product5 = new("Milky Way", "B2", 2.4m, 4);
+        public static readonly Product Product5 = new("Milky Way", "B2", 2.9m, 4);
         public static readonly Product Product6 = new("M&Ms", "B3", 2.7m, 0);
 
         #endregion

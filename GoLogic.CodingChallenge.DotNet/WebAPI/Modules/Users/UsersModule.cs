@@ -1,4 +1,5 @@
-﻿using WebAPI.Modules.Users.Models;
+﻿using WebAPI.Modules.Purchases.Models;
+using WebAPI.Modules.Users.Models;
 
 namespace WebAPI.Modules.Users
 {
@@ -11,9 +12,10 @@ namespace WebAPI.Modules.Users
 
         public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/user/{name}", GetUserByNameAsync());
+            endpoints.MapGet("/user/{username}", GetUserByNameAsync());
             endpoints.MapPost("/user", CreateUserAsync());
             endpoints.MapPost("/deposit", DepositFundsAsync());
+            endpoints.MapGet("/cashout/{username}", CashOutAsync());
 
             return endpoints;
         }
@@ -28,11 +30,49 @@ namespace WebAPI.Modules.Users
 
         #region Private Members
 
+        private static Func<string, IUserRepository, IProductRepository, IPurchaseRepository, Task<IResult>> CashOutAsync()
+        {
+            return async (userName, userRepository, productRepository, purchaseRepository) =>
+            {
+                var user = await userRepository.GetByNameAsync(userName);
+
+                if (user == null)
+                    return Results.NotFound("No such user found");
+
+                var products = await productRepository.GetAllProductsAsync();
+                var purchases = await purchaseRepository.GetAllUserPurchasesAsync(user);
+
+                var purchasesDto = purchases.Select(
+                    s => new ListPurchasesDto
+                    {
+                        Price = products.First(f => f.Name == s.ProductName).Price,
+                        ProductName = s.ProductName,
+                        Quantity = 1,
+                        Total = products.First(f => f.Name == s.ProductName).Price
+                    });
+
+                var purchasesGrouped = purchasesDto.GroupBy(g => new { g.ProductName, g.Price })
+                    .ToList()
+                    .Select(s => new { s.Key.ProductName, s.Key.Price, Quantity = s.Sum(g => g.Quantity), Total = s.Sum(g => g.Total) })
+                    .ToList();
+
+                var result = new
+                {
+                    UserName = user.Name,
+                    TotalSpent = purchasesGrouped.Sum(s => s.Total),
+                    ChangeRecevied = user.BalanceAvailable,
+                    Purchases = purchasesGrouped
+                };
+
+                return Results.Ok(result);
+            };
+        }
+
         private static Func<CreateUserDto, IUserRepository, Task<IResult>> CreateUserAsync()
         {
             return async (userDto, userRepository) =>
             {
-                var user = new User(userDto.Name);
+                var user = new User(userDto.UserName);
                 await userRepository.SaveNewUserAsync(user);
 
                 return Results.Ok();
@@ -57,9 +97,9 @@ namespace WebAPI.Modules.Users
 
         private static Func<string, IUserRepository, IMapper, Task<IResult>> GetUserByNameAsync()
         {
-            return async (name, userRepository, mapper) =>
+            return async (username, userRepository, mapper) =>
             {
-                var user = await userRepository.GetByNameAsync(name);
+                var user = await userRepository.GetByNameAsync(username);
                 var result = mapper.Map<UserDto>(user);
 
                 return user == null ? Results.NotFound() : Results.Ok(result);

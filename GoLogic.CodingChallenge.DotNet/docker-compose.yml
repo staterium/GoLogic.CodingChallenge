@@ -18,6 +18,8 @@ services:
         depends_on:
             - mongodb
         restart: always
+        ports:
+          - "50345:443"
 
 volumes:
   mongodb_data:

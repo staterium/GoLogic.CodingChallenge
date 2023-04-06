@@ -1,7 +1,6 @@
 ﻿namespace WebAPI.Modules.Purchases.Models
 {
-    [AutoMap(typeof(Purchase))]
-    internal class PurchaseDto
+    internal class MakePurchaseDto
     {
         #region Properties
 

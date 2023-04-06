@@ -1,0 +1,92 @@
+@hostname = localhost
+@port = 50345
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+@userName = TestUser
+
+### Get all products
+GET https://{{host}}/products
+
+### Create new user
+POST https://{{host}}/user
+Content-Type: {{contentType}}
+
+{
+    "userName": "{{userName}}"
+}
+
+### Get user by name
+GET https://{{host}}/user/{{userName}}
+
+
+### Deposit funds
+POST https://{{host}}/deposit
+Content-Type: {{contentType}}
+
+{
+    "userName": "{{userName}}",
+    "depositAmount": 4.3
+}
+
+### Check balance
+GET https://{{host}}/user/{{userName}}
+
+
+### Make a valid purchase
+POST https://{{host}}/purchase
+Content-Type: {{contentType}}
+
+{
+    "userName": "{{userName}}",
+    "productName": "Mars"
+}
+
+
+### Make an invalid purchase (no stock)
+POST https://{{host}}/purchase
+Content-Type: {{contentType}}
+
+{
+    "userName": "{{userName}}",
+    "productName": "M&Ms"
+}
+
+
+### Make an invalid purchase (insufficient funds)
+POST https://{{host}}/purchase
+Content-Type: {{contentType}}
+
+{
+    "userName": "{{userName}}",
+    "productName": "Milky Way"
+}
+
+
+### Make a valid purchase
+POST https://{{host}}/purchase
+Content-Type: {{contentType}}
+
+{
+    "userName": "{{userName}}",
+    "productName": "KitKat"
+}
+
+### Make another valid purchase
+POST https://{{host}}/purchase
+Content-Type: {{contentType}}
+
+{
+    "userName": "{{userName}}",
+    "productName": "KitKat"
+}
+
+### Get all products to check stock levels
+GET https://{{host}}/products
+
+
+### Check purchase history
+GET https://{{host}}/purchases/{{userName}}
+
+
+### Cash out and get change
+GET https://{{host}}/cashout/{{userName}}
