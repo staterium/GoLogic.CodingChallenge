@@ -1,7 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
-using Infrastructure.Config;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
 namespace Infrastructure.Repositories.MongoDB
@@ -25,10 +24,10 @@ namespace Infrastructure.Repositories.MongoDB
         /// <param name="databaseSettings">
         ///     The database settings used to connect to the MongoDB database.
         /// </param>
-        public PurchaseRepository(IOptions<DatabaseSettings> databaseSettings)
+        public PurchaseRepository(IConfiguration config)
         {
-            var mongoClient = new MongoClient(databaseSettings.Value.ConnectionString);
-            var mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
+            var mongoClient = new MongoClient(config["ConnectionString"]);
+            var mongoDatabase = mongoClient.GetDatabase(config["DatabaseName"]);
 
             _purchasesCollection = mongoDatabase.GetCollection<Purchase>("Purchases");
         }
