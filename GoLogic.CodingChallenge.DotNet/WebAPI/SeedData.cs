@@ -31,6 +31,10 @@
             catch (TimeoutException)
             {
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"LOGGING ---- {ex}");
+            }
         }
 
         #endregion
