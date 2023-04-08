@@ -1,9 +1,4 @@
-﻿using Core.Entities;
-using Core.Interfaces;
-using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
-
-namespace Infrastructure.Repositories.MongoDB
+﻿namespace Infrastructure.Repositories.MongoDB
 {
     /// <summary>
     ///     A repository that uses MongoDB to store users.
@@ -21,8 +16,8 @@ namespace Infrastructure.Repositories.MongoDB
         /// <summary>
         ///     Creates a new instance of the <see cref="UserRepository" /> class.
         /// </summary>
-        /// <param name="databaseSettings">
-        ///     The database settings used to connect to the MongoDB database.
+        /// <param name="config">
+        ///     The configuration that contains the connection string and database name.
         /// </param>
         public UserRepository(IConfiguration config)
         {

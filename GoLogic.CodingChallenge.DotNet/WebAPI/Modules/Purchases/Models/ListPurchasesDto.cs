@@ -1,5 +1,8 @@
 ﻿namespace WebAPI.Modules.Purchases.Models
 {
+    /// <summary>
+    ///     A data transfer object that describes a purchase.
+    /// </summary>
     public class ListPurchasesDto
     {
         #region Properties

@@ -1,9 +1,4 @@
-﻿using Core.Entities;
-using Core.Interfaces;
-using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
-
-namespace Infrastructure.Repositories.MongoDB
+﻿namespace Infrastructure.Repositories.MongoDB
 {
     /// <summary>
     ///     A repository that uses MongoDB to store products.
@@ -21,8 +16,8 @@ namespace Infrastructure.Repositories.MongoDB
         /// <summary>
         ///     Creates a new instance of the <see cref="ProductRepository" /> class.
         /// </summary>
-        /// <param name="databaseSettings">
-        ///     The database settings used to connect to the MongoDB database.
+        /// <param name="config">
+        ///     The configuration that contains the connection string and database name.
         /// </param>
         public ProductRepository(IConfiguration config)
         {
@@ -41,9 +36,9 @@ namespace Infrastructure.Repositories.MongoDB
             return _productsCollection.Find(_ => true).ToListAsync();
         }
 
-        public Task<Product> GetProductByNameAsync(string name)
+        public Task<Product?> GetProductByNameAsync(string name)
         {
-            return _productsCollection.Find(product => product.Name == name).FirstOrDefaultAsync();
+            return _productsCollection.Find(product => product.Name == name).FirstOrDefaultAsync()!;
         }
 
         public Task SaveNewProductAsync(Product product)

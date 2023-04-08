@@ -1,7 +1,9 @@
 ﻿namespace WebAPI.Modules.Users.Models
 {
+    /// <summary>
+    /// </summary>
     [AutoMap(typeof(User))]
-    internal class UserDto
+    public class UserDto
     {
         #region Properties
 

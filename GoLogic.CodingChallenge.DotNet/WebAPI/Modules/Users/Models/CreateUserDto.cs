@@ -1,6 +1,9 @@
 ﻿namespace WebAPI.Modules.Users.Models
 {
-    internal class CreateUserDto
+    /// <summary>
+    ///     Represents the data transfer object for a user creation operation.
+    /// </summary>
+    public class CreateUserDto
     {
         #region Properties
 

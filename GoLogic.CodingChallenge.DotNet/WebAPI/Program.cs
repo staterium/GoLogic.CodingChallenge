@@ -1,11 +1,7 @@
-using Infrastructure.Config;
 using WebAPI;
 using WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
-//add config
-builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("MongoDBDatabase"));
 
 //add modules
 builder.Services.RegisterModules();
@@ -30,8 +26,12 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await SeedData.InitializeAsync(services);
+    await ClearAndSeedData.InitializeAsync(services);
 }
 
 app.MapEndpoints();
 app.Run();
+
+public partial class Program
+{
+}

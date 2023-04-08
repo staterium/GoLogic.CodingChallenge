@@ -1,6 +1,9 @@
 ﻿namespace WebAPI.Modules.Purchases.Models
 {
-    internal class MakePurchaseDto
+    /// <summary>
+    ///     A data transfer object that describes a purchase.
+    /// </summary>
+    public class MakePurchaseDto
     {
         #region Properties
 

@@ -1,6 +1,9 @@
 ﻿namespace WebAPI
 {
-    public static class SeedData
+    /// <summary>
+    ///     A helper class that clears the database and seeds it with some data.
+    /// </summary>
+    public static class ClearAndSeedData
     {
         #region Fields
 
@@ -30,10 +33,6 @@
             // Swallow exception so the API can still start, and we can see the error when making API calls.
             catch (TimeoutException)
             {
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"LOGGING ---- {ex}");
             }
         }
 

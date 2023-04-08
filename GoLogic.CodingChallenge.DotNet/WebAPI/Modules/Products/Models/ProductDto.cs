@@ -1,7 +1,10 @@
 ﻿namespace WebAPI.Modules.Products.Models
 {
+    /// <summary>
+    ///     A data transfer object for the product entity.
+    /// </summary>
     [AutoMap(typeof(Product))]
-    internal class ProductDto
+    public class ProductDto
     {
         #region Properties
 

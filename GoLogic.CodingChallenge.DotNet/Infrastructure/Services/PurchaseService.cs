@@ -1,9 +1,8 @@
-﻿using Core.Entities;
-using Core.Exceptions;
-using Core.Interfaces;
-
-namespace Core.Services
+﻿namespace Core.Services
 {
+    /// <summary>
+    ///     A service that handles the purchase of products.
+    /// </summary>
     public class PurchaseService : IPurchaseService
     {
         #region Fields

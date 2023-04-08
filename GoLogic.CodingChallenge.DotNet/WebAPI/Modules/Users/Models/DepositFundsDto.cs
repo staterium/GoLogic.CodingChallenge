@@ -1,6 +1,9 @@
 ﻿namespace WebAPI.Modules.Users.Models
 {
-    internal class DepositFundsDto
+    /// <summary>
+    ///     Represents the data transfer object for a deposit funds operation.
+    /// </summary>
+    public class DepositFundsDto
     {
         #region Properties
 

@@ -12,7 +12,6 @@ namespace Core.Interfaces
         /// <summary>
         ///     Deletes all users from the repository.
         /// </summary>
-        /// <returns></returns>
         Task DeleteAllUsersAsync();
 
         /// <summary>

@@ -30,6 +30,9 @@ namespace WebAPI.Modules.Purchases
 
         #region Public Members
 
+        /// <summary>
+        ///     Gets all the purchases for a user, grouped by product name.
+        /// </summary>
         public static List<GroupedPurchaseDto> GetPurchasesGrouped(List<Purchase> purchases, List<Product> products)
         {
             var purchasesDto = purchases.Select(
@@ -51,6 +54,9 @@ namespace WebAPI.Modules.Purchases
 
         #region Private Members
 
+        /// <summary>
+        ///     Purchases a product for a user
+        /// </summary>
         private static Func<MakePurchaseDto, IUserRepository, IProductRepository, IPurchaseService, Task<IResult>> DoPurchaseAsync()
         {
             return async (purchaseDto, userRepository, productRepository, purchaseService) =>
@@ -78,6 +84,9 @@ namespace WebAPI.Modules.Purchases
             };
         }
 
+        /// <summary>
+        ///     Gets all the purchases for a user, grouped by product name.
+        /// </summary>
         private static Func<string, IUserRepository, IProductRepository, IPurchaseRepository, Task<IResult>> GetPurchasesAsync()
         {
             return async (userName, userRepository, productRepository, purchaseRepository) =>

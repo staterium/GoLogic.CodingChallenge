@@ -1,5 +1,8 @@
 ﻿namespace WebAPI.Modules.Purchases.Models
 {
+    /// <summary>
+    ///     A DTO that describes all a user's purchases, grouped by product
+    /// </summary>
     public class GroupedPurchaseDto
     {
         #region Properties

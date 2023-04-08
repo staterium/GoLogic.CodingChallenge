@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using WebAPI.Modules.Products.Models;
+﻿using WebAPI.Modules.Products.Models;
 
 namespace WebAPI.Modules.Products
 {
@@ -28,6 +27,9 @@ namespace WebAPI.Modules.Products
 
         #region Private Members
 
+        /// <summary>
+        ///     Searches for a product by its name
+        /// </summary>
         private static Func<string, IProductRepository, IMapper, Task<IResult>> GetProductByNameAsync()
         {
             return async (name, productRepository, mapper) =>
@@ -39,7 +41,9 @@ namespace WebAPI.Modules.Products
             };
         }
 
-
+        /// <summary>
+        ///     Returns a list of all products
+        /// </summary>
         private static Func<IProductRepository, IMapper, Task<IResult>> GetProductsAsync()
         {
             return async (productRepository, mapper) =>

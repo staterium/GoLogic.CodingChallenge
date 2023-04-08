@@ -12,8 +12,6 @@ namespace WebAPI.Modules.Users
 
         public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/", () => Results.Ok("API available"));
-            endpoints.MapGet("/conn", (IConfiguration config) => Results.Ok(config["ConnectionString"]));
             endpoints.MapGet("/user/{username}", GetUserByNameAsync());
             endpoints.MapPost("/user", CreateUserAsync());
             endpoints.MapPost("/deposit", DepositFundsAsync());
@@ -32,6 +30,9 @@ namespace WebAPI.Modules.Users
 
         #region Private Members
 
+        /// <summary>
+        ///     A function that cashes out the user.
+        /// </summary>
         private static Func<string, IUserRepository, IProductRepository, IPurchaseRepository, Task<IResult>> CashOutAsync()
         {
             return async (userName, userRepository, productRepository, purchaseRepository) =>
@@ -45,11 +46,11 @@ namespace WebAPI.Modules.Users
                 var purchases = await purchaseRepository.GetAllUserPurchasesAsync(user);
                 var purchasesGrouped = PurchasesModule.GetPurchasesGrouped(purchases, products);
 
-                var result = new
+                var result = new CashOutDto
                 {
                     UserName = user.Name,
                     TotalSpent = purchasesGrouped.Sum(s => s.Total),
-                    ChangeRecevied = user.BalanceAvailable,
+                    ChangeReceived = user.BalanceAvailable,
                     Purchases = purchasesGrouped
                 };
 
@@ -57,6 +58,9 @@ namespace WebAPI.Modules.Users
             };
         }
 
+        /// <summary>
+        ///     A function that creates a new user.
+        /// </summary>
         private static Func<CreateUserDto, IUserRepository, Task<IResult>> CreateUserAsync()
         {
             return async (userDto, userRepository) =>
@@ -68,6 +72,9 @@ namespace WebAPI.Modules.Users
             };
         }
 
+        /// <summary>
+        ///     A function that deposits funds to the user.
+        /// </summary>
         private static Func<DepositFundsDto, IUserRepository, Task<IResult>> DepositFundsAsync()
         {
             return async (depositFundsDto, userRepository) =>
@@ -84,6 +91,9 @@ namespace WebAPI.Modules.Users
             };
         }
 
+        /// <summary>
+        ///     A function that gets a user by name.
+        /// </summary>
         private static Func<string, IUserRepository, IMapper, Task<IResult>> GetUserByNameAsync()
         {
             return async (username, userRepository, mapper) =>
