@@ -38,7 +38,7 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v3
         with:
-          name: dotnet-results
+          name: dotnet-unittest-results
           path: UnitTestResults
         if: ${{ always() }}
         
@@ -48,7 +48,7 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v3
         with:
-          name: dotnet-results
+          name: dotnet-functionaltest-results
           path: FunctionalTestResults
         if: ${{ always() }}
 
