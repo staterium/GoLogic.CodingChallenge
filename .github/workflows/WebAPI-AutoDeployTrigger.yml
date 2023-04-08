@@ -7,7 +7,7 @@ on:
     branches: 
       [ main ]
     paths:
-    - 'GoLogic.CodingChallenge.DotNet/WebAPI/**'
+    - 'GoLogic.CodingChallenge.DotNet/**'
     - '.github/workflows/WebAPI-AutoDeployTrigger.yml'
 
   # Allow mannually trigger 
