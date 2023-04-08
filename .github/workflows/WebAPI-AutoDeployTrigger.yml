@@ -27,10 +27,10 @@ jobs:
           dotnet-version: '6.0.x'
           
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore ./GoLogic.CodingChallenge.DotNet/GoLogic.CodingChallenge.DotNet.sln
 
       - name: Build
-        run: dotnet build
+        run: dotnet build ./GoLogic.CodingChallenge.DotNet/GoLogic.CodingChallenge.DotNet.sln
         
       - name: Run unit tests
         run: dotnet test ./Tests/UnitTests/UnitTests.csproj --logger trx --results-directory "UnitTestResults"        
