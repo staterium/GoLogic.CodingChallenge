@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\GoLogic.CodingChallenge.DotNet\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
