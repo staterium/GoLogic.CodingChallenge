@@ -50,9 +50,11 @@ Azure Container Apps make it easy to deploy docker containers in a single enviro
 
 ## Trade-offs and areas for improvement
 
-- If I had more time I would have probably developed a v2 of the app, using a more microservice approach and vertical organisation of related concepts.
 - There is an opportunity to improve the architecture using event messaging. All the user actions (deposit, purchase, cashout), can be improved by firing events. This will enable much easier future development due to the decoupling of procedure calls.
 - The system implements no security measures whatsoever. To enable scaling in the cloud I "log" a user in using only a name, and that name is then the user's identity. There is no validation that a user name is unique.
 - There is no logging apart from the system logging that Azure performs on container apps. This can definitely be improved.
+- If I had more time I would have probably developed a v2 of the app, using a more microservices-based approach and vertical organisation of related concepts.
+
+![Proposed v2 Design](https://i.imgur.com/M0q4ngq.png)
 
 The published address for the API is at https://webapi.politetree-28b92419.australiaeast.azurecontainerapps.io/.
